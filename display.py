@@ -3,6 +3,7 @@ import os
 
 
 def banner():
+    #banner start up of application
     print("--------------------------------------")
     print("  _        _                      _ _ ")
     print(" | |_  ___| |_  _   __ _ _ _ __ _(_) |")
@@ -15,11 +16,13 @@ def banner():
 
 
 def sep():
+    #seperator
     print("                                      ")
 
 
 
 def commands():
+    #various commands
     print("Commands:")
     print("---------")
     print("1. greeks install - Installer designed for my system")
@@ -30,10 +33,12 @@ def commands():
 
 
 def clear():
+    #clear terminal 
     os.system("clear")
 
 
 def reboot_menu():
+    #reboot menu between cycles
     print("Please reboot system and rerun scripts!")
     reboot = input("reboot now? (y/n): ")
     if reboot == 'y' or reboot == 'yes':
