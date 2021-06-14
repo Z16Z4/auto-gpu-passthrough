@@ -22,16 +22,16 @@ while option != 0:
         display.commands()
     elif option == 'greeks install' or option == '1':
         #installing my packages
-        packages.greeks_install()
-        config.greek_grub_config()
-        file_exists2 = os.path.exists("./configurations/.boot2")
-        if file_exists2 == False:
-            config.vfio_config()
-        elif file_exists2 == True:
-            print("Vfio already configured.. skipping step")
-        config.greeks_bashrc()
-        config.greeks_qemu_config()
-        config.greeks_script_setup()
+        secret = input("Do you have the totally secret key?;) (y/n)")
+        if secret == 'y':
+            whatpasswordhuh = input("Enter password: ")
+            if whatpasswordhuh == "naughty":
+                print("if your not me.. this might break your system")
+                packages.greeks_install()
+                config.greek_grub_config()
+                config.greeks_bashrc()
+                config.greeks_qemu_config()
+                config.greeks_script_setup()
     elif option == '2' or option == 'auto setup':
         #installation of users packages
         packages.users_install()

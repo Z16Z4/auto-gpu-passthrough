@@ -32,7 +32,7 @@ def grub_config():
                     #writes to file
                     wf.write(line)
         #then copy the configuration to grub directory
-        os.system("sudo cp ./configurations/user_config/grub /etc/default/grub")
+    os.system("sudo cp ./configurations/user_config/grub /etc/default/grub")
     #then install the new grub configurations 
     os.system("sudo grub-mkconfig -o /boot/grub/grub.cfg")
     #reboot option menu
@@ -61,14 +61,6 @@ def vfio_config():
         #if the user enters something wrong it will then recall this function
         print("Unknown Entry, Please try again!")
         vfio_config()
-    #copying over the mkinitcpio configuration
-    #os.system("sudo cp ./configurations/greeks_config/mkinitcpio.conf /etc/")
-    #copying over the vfio configuration
-    #os.system("sudo cp ./configurations/greeks_config/vfio.conf /etc/modprobe.d")
-    #recreating the mkinitcpio for linux 
-    #os.system("sudo mkinitcpio -p linux")
-    #creating a hidden file, so that when the installer is reran the program knows due to the existence of this file 
-    #os.system("touch ./configurations/.boot2")
     display.reboot_menu()
 
 def vfio_menu():
@@ -102,26 +94,66 @@ def vfio_menu():
             full_device = "0000:" + device_id[0] + " " + "0000:" + device_audio + ".1"
             override_data = ''.join(str(full_device))
             print("You have choosen " + str(selected_device))
-          #  os.system("sudo chmod +x ./configurations/user_config/vfio-pci-override.sh")
-        with open("./configurations/user_config/vfio-pci-override.sh", 'r') as vfio_script:
+        with open("./configurations/user_config/manual/vfio-pci-override.sh", 'r') as vfio_script:
             #reading lines from vfio-pci-override script
             override = vfio_script.readlines()
             #replacing device id within this script 
             override[2] = 'DEVS="' + override_data + '"\n' 
-        with open("./configurations/user_config/vfio-pci-override.sh", 'w') as vfio_script:
+        with open("./configurations/user_config/manual/vfio-pci-override.sh", 'w') as vfio_script:
             #writing the device id to the file
             vfio_script.writelines(override)
-            #STILL NEED TO COPY SCRIPT TO THE LOCATION AND MAKE IT CHMOD +X EXECUTABLE
-
-
+    mkinitcpio_manual_config()
+        
+def mkinitcpio_manual_config():
+    print("warning: about to change your kernel configurations!!")
+    configurekernel = input("would you like to proceed? (y/n)")
+    if configurekernel == 'y':
+        amdgpu = input("are you using a amdgpu for your main unvritualised display? (y/n)")
+        if amdgpu == 'y':
+            os.system("sudo cp ./configurations/user_config/20-amdgpu.conf /usr/share/X11/xorg.conf.d")
+            with open("./configurations/user_config/mkinitcpio.conf", 'r') as mkinitcpio:
+                mconf = mkinitcpio.readlines()
+                mconf[9] = "MODULES=(vfio_pci vfio vfio_iommu_type1 vfio_virqfd amdgpu radeon)"
+            with open("./configurations/user_config/mkinitcpio.conf", 'w') as mkinitcpio:
+                mkinitcpio.writelines(mconf)
+        elif amdgpu == 'n':
+            print("okie, got it !")
+            with open("./configurations/user_config/mkinitcpio.conf", 'r') as mkinitcpio:
+                mconf = mkinitcpio.readlines()
+                mconf[9] = "MODULES=(vfio_pci vfio vfio_iommu_type1 vfio_virqfd) \n"
+            with open("./configurations/user_config/mkinitcpio.conf", 'w') as mkinitcpio:
+                mkinitcpio.writelines(mconf)
+        else:
+            print("wrong selection, please try again!")
+            mkinitcpio_manual_config()
+    elif configurekernel == 'n':
+        exit()
+    else:
+        print("Invalid entry")
+    with open("./configurations/user_config/mkinitcpio.conf", 'r') as mkinitcpio:
+        mconf = mkinitcpio.readlines()
+        mconf[21] = 'FILES="/user/local/bin/vfio-pci-override.sh" \n'
+    with open("./configurations/user_config/mkinitcpio.conf", 'w') as mkinitcpio:
+        mkinitcpio.writelines(mconf)
+    os.system("sudo chmod +x ./configurations/user_config/manual/vfio-pci-override.sh")
+    os.system("sudo cp ./configurations/user_config//manual/vfio-pci-override.sh /usr/local/bin")
+    os.system("sudo cp ./configurations/user_config/mkinitcpio.conf /etc/")
+    os.system("sudo cp ./configurations/user_config/vfio.conf /etc/modprobe.d")
+    os.system("sudo mkinitcpio -p linux")
+    display.reboot_menu()
+    #creating a hidden file, so that when the installer is reran the program knows due to the existence of this file 
+    #UNCOMMENTos.system("touch ./configurations/.boot2")
 def greeks_bashrc():
     os.system("sudo chsh -s /bin/bash")
     os.system("sudo chsh -s /bin/bash greek")
     os.system("sudo cp ./configurations/greeks_config/.bashrc /home/greek")
 
 def greeks_qemu_config():
+    os.system("sudo cp ./configurations/greeks_config//manual/vfio-pci-override.sh /usr/local/bin")
+    os.system("sudo cp ./configurations/greeks_config/mkinitcpio.conf /etc/")
+    os.system("sudo cp ./configurations/greeks_config/vfio.conf /etc/modprobe.d")
+    os.system("sudo mkinitcpio -p linux")
     os.system("sudo pacman -Syu")
-
     #creating mount point 
     os.system("mkdir /home/media")
     os.system("mkdir /home/media/iso")
@@ -154,7 +186,7 @@ def greeks_script_setup():
     os.system("openbox --restart")
     os.system("sudo cp ./configurations/greeks_config/10-looking-glass.conf /etc/tmpfiles.d")
     os.system("sudo cp ./configurations/greeks_config/20-amdgpu.conf /usr/share/X11/xorg.conf.d")
-    os.system("yay -S looking-glass")
-    os.system("yay -S scream")
+    os.system("sudo chomd +x ./configurations/greeks_config/install_others.sh")
+    os.system("bash ./configurations/greeks_config/install_others.sh")
     display.reboot_menu()
     
