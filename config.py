@@ -54,13 +54,16 @@ def vfio_config():
         #delete manual script, place auto script for gpu
         print("Auto configuration")
     elif gpu_passthrough == "man":
+        with open('./configurations/user_config/iommu_pairs', 'w') as man:
+            output = os.popen("lspci -nnk | grep 'VGA'").read()
+            man.seek(0)
+            man.writelines(str(output))
+        vfio_menu()
         #menu to select GPU, adds device ID to script
-        #write device ids to file
         #display devices for user 
         #number devices
         #if user enters 1 then device 1
-        print("Manual configuration") 
-        os.system("sudo cp ./configurations/greeks_config/vfio-pci-override.sh")
+        #os.system("sudo cp ./configurations/greeks_config/vfio-pci-override.sh")
     else:
         print("Unknown Entry, Please try again!")
         vfio_config()
@@ -69,6 +72,16 @@ def vfio_config():
     os.system("sudo mkinitcpio -p linux")
     os.system("touch ./configurations/.boot2")
     display.reboot_menu()
+
+def vfio_menu():
+    with open("./configurations/user_config/iommu_pairs", 'r') as manr:
+        for index, line in enumerate(manr):
+            print("Enter " + str(index) + " for : \n", line)
+        Select_GPU = input("Please select the GPU for passthrough using the numbers above?: ")
+        #store ented number in a file and use this to get the line number of the gpu they want to passthrough
+        # based on this information then filter down that entry inside the iommu_pairs file to get that ID for the device. the modify the iommu_override file 
+        # and copy it into the correct location 
+
 
 def greeks_bashrc():
     os.system("sudo chsh -s /bin/bash")
