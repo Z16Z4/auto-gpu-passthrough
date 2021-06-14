@@ -35,13 +35,9 @@ while option != 0:
     elif option == '2' or option == 'auto setup':
         #installation of users packages
         packages.users_install()
-        #checking if new grub file exists
-        file_exists = os.path.exists('./configurations/user_config/grub')
-        if file_exists == False:
-            #configures grub for amd and intel systems for iommu
-            config.grub_config()
-        elif file_exists == True:
-            print("Grub already configured.. skipping step")
+        config.grub_config()
+        config.vfio_config()
+        
     elif option == "clear" or "3":
         #clear terminal option
         display.clear()

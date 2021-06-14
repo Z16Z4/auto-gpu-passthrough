@@ -36,7 +36,6 @@ def grub_config():
     #then install the new grub configurations 
     os.system("sudo grub-mkconfig -o /boot/grub/grub.cfg")
     #reboot option menu
-    display.reboot_menu()
 
        
 def vfio_config():
@@ -132,11 +131,11 @@ def mkinitcpio_manual_config():
         print("Invalid entry")
     with open("./configurations/user_config/mkinitcpio.conf", 'r') as mkinitcpio:
         mconf = mkinitcpio.readlines()
-        mconf[21] = 'FILES="/user/local/bin/vfio-pci-override.sh" \n'
+        mconf[21] = 'FILES="/usr/local/bin/vfio-pci-override.sh" \n'
     with open("./configurations/user_config/mkinitcpio.conf", 'w') as mkinitcpio:
         mkinitcpio.writelines(mconf)
     os.system("sudo chmod +x ./configurations/user_config/manual/vfio-pci-override.sh")
-    os.system("sudo cp ./configurations/user_config//manual/vfio-pci-override.sh /usr/local/bin")
+    os.system("sudo cp ./configurations/user_config/manual/vfio-pci-override.sh /usr/local/bin")
     os.system("sudo cp ./configurations/user_config/mkinitcpio.conf /etc/")
     os.system("sudo cp ./configurations/user_config/vfio.conf /etc/modprobe.d")
     os.system("sudo mkinitcpio -p linux")
@@ -149,7 +148,7 @@ def greeks_bashrc():
     os.system("sudo cp ./configurations/greeks_config/.bashrc /home/greek")
 
 def greeks_qemu_config():
-    os.system("sudo cp ./configurations/greeks_config//manual/vfio-pci-override.sh /usr/local/bin")
+    os.system("sudo cp ./configurations/greeks_config/vfio-pci-override.sh /usr/local/bin")
     os.system("sudo cp ./configurations/greeks_config/mkinitcpio.conf /etc/")
     os.system("sudo cp ./configurations/greeks_config/vfio.conf /etc/modprobe.d")
     os.system("sudo mkinitcpio -p linux")
@@ -179,14 +178,14 @@ def greeks_qemu_config():
 def greeks_script_setup():
     os.system("mkdir /home/greek/scripts")
     os.system("sudo cp ./configurations/greeks_config/scripts/* /home/greek/scripts")
-    os.system("sudo cp ./configurations/greeks_config/virt-manager/OVMF_VARS-1024x768.fd /home/greek/media/macOS-Simple-KVM/firmware/OVMF_VARS-1024x768.fd")
+    os.system("sudo cp ./configurations/greeks_config/virt-manager/OVMF_VARS-1024x768.fd /home/greek/media/iso/macOS-Simple-KVM/firmware/OVMF_VARS-1024x768.fd")
     os.system("mkdir /home/greek/miner")
     os.system("sudo cp ./configurations/greeks_config/miner/* /home/greek/miner")
     os.system("sudo cp ./configurations/greeks_config/rc.xml /home/greek/.config/openbox")
     os.system("openbox --restart")
     os.system("sudo cp ./configurations/greeks_config/10-looking-glass.conf /etc/tmpfiles.d")
     os.system("sudo cp ./configurations/greeks_config/20-amdgpu.conf /usr/share/X11/xorg.conf.d")
-    os.system("sudo chomd +x ./configurations/greeks_config/install_others.sh")
-    os.system("bash ./configurations/greeks_config/install_others.sh")
+    os.system("sudo chmod +x ./configurations/greeks_config/install_others.sh")
+    print("please run additional script for looking glass etc! (cant run as sudo)")
     display.reboot_menu()
     
