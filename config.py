@@ -130,6 +130,7 @@ def mkinitcpio_manual_config():
     os.system("sudo cp ./configurations/user_config/manual/vfio-pci-override.sh /usr/local/bin")
     os.system("sudo cp ./configurations/user_config/mkinitcpio.conf /etc/")
     os.system("sudo cp ./configurations/user_config/vfio.conf /etc/modprobe.d")
+    os.system("touch ./configurations/user_config/ran_install_before")
     os.system("sudo mkinitcpio -p linux")
     display.reboot_menu()
     #creating a hidden file, so that when the installer is reran the program knows due to the existence of this file 
