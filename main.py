@@ -6,7 +6,7 @@ def menu():
     display.banner()
     display.sep()
 menu()
-option = input("user@holy-grail-installer> ")
+option = input("user@auto-gpu-passthrough> ")
 
 while option != 0:
     if option == "0":
@@ -21,17 +21,7 @@ while option != 0:
         display.sep()
         display.commands()
     elif option == 'greeks install' or option == '1':
-        #installing my packages
-        secret = input("Do you have the totally secret key?;) (y/n)")
-        if secret == 'y':
-            whatpasswordhuh = input("Enter password: ")
-            if whatpasswordhuh == "naughty":
-                print("if your not me.. this might break your system")
-                packages.greeks_install()
-                config.greek_grub_config()
-                config.greeks_bashrc()
-                config.greeks_qemu_config()
-                config.greeks_script_setup()
+        print("Invalid option please download https://github.com/cronos-hash/myconf")
     elif option == '2' or option == 'auto setup':
         #installation of users packages
         packages.users_install()
@@ -51,4 +41,4 @@ while option != 0:
         print("Not a command")
     print()
     #user bar
-    option = input("user@holy-grail-installer> ")
+    option = input("user@auto-gpu-passthrough> ")
