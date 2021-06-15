@@ -132,6 +132,13 @@ def mkinitcpio_manual_config():
     os.system("sudo cp ./configurations/user_config/vfio.conf /etc/modprobe.d")
     os.system("touch ./configurations/user_config/ran_install_before")
     os.system("sudo mkinitcpio -p linux")
+    os.system("sudo systemctl enable libvirtd.service")
+    os.system("sudo systemctl start libvirtd.service")
+    os.system("sudo systemctl start virtlogd.socket")
+    os.system("sudo systemctl virtlogd.socket")
+    os.system("sudo virsh net-start default")
+    os.system("sudo sudo systemctl restart libvirtd")
+    os.system("sudo virsh net-autostart default")
     display.reboot_menu()
     #creating a hidden file, so that when the installer is reran the program knows due to the existence of this file 
     #UNCOMMENTos.system("touch ./configurations/.boot2")
