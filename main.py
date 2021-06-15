@@ -7,7 +7,6 @@ def menu():
     display.sep()
 menu()
 option = input("user@auto-gpu-passthrough> ")
-
 while option != 0:
     if option == "0":
         #null
@@ -23,23 +22,19 @@ while option != 0:
     elif option == 'greeks install' or option == '1':
         print("Invalid option please download https://github.com/cronos-hash/myconf")
     elif option == '2' or option == 'auto setup':
-        rerun = path.exists("./configurations/user_config/ran_install_before")
-        if rerun == "True":
+        packages.userinstall()
+        file_exists = os.path.exists('./configurations/user_config/ran_install_before')
+        if file_exists == True:
+            print("Setuop has ran before, replacing kernel configuration template")
             os.system("sudo rm ./configurations/user_config/ran_install_before")
             os.system("sudo rm ./configurations/user_config/mkinitcpio.conf")
-            os.system("sudo cp ./configurations/user_config/backup/mkinitcpio.conf ./configurations/user_config/mkinitcpio.conf"
-            packages.users_install()
+            os.system("sudo cp ./configurations/user_config/backup/mkinitcpio.conf ./configurations/user_config/mkinitcpio.conf")
             config.grub_config()
             config.vfio_config()
-        elif rerun == "False":
-            #check if path exists, if path does exist, reset the configuration 
-            #installation of users packages
-            packages.users_install()
+        elif file_exists == False:
+            packages.userinstall()
             config.grub_config()
             config.vfio_config()
-        else:
-            print("Corrupted installation, Please try again :(!")
-        
     elif option == "clear" or "3":
         #clear terminal option
         display.clear()
