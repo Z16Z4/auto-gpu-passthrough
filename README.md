@@ -12,8 +12,5 @@ The second script (manual mode) adds a script as a hook within the kernel config
 ## How does enabling iommu work automatically?
 The program comes with two seperate config files for grub, one for intel CPUs, and the other for AMD CPU's. THe program will autodetect the type of vendor used, then change the configuration depending on this vendor.
 
-## What are these other options?
-The other options are specific towards the machine i use, i put a secret password on this installer and its totally impossible to hack. NOTE: my configurations may break your system proceed with caution.
-
 ## Contact
 feel free to commit to the project, eventually i want this program to setup a whole KVM/looking glass windows machine seamlessesly for users, maybe make windows as a secondary option part of a distro by default. 
